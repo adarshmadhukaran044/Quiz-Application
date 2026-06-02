@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuizBlitz</title>
+
+  <!-- Google Fonts: Bebas Neue for display, DM Sans for body -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ───────────────────────────────────────────
+       SCREEN 1: Start / Welcome Screen
+  ─────────────────────────────────────────────── -->
+  <div id="start-screen" class="screen active">
+    <div class="brand">
+      <span class="brand-icon">⚡</span>
+      <h1 class="brand-title">QuizBlitz</h1>
+      <p class="brand-sub">Test your knowledge. Beat the clock.</p>
+    </div>
+    <div class="info-cards">
+      <div class="info-card"><span>🧠</span><p>10 Questions</p></div>
+      <div class="info-card"><span>⏱️</span><p>15 sec / Q</p></div>
+      <div class="info-card"><span>🏆</span><p>Instant Score</p></div>
+    </div>
+    <button id="start-btn" class="btn-primary">Start Quiz</button>
+  </div>
+
+  <!-- ───────────────────────────────────────────
+       SCREEN 2: Quiz Screen
+  ─────────────────────────────────────────────── -->
+  <div id="quiz-screen" class="screen">
+
+    <!-- Top bar: progress & score -->
+    <div class="top-bar">
+      <span id="question-counter" class="counter">Q 1 / 10</span>
+      <span id="score-display" class="score-tag">Score: 0</span>
+    </div>
+
+    <!-- Progress bar (fills as timer counts down) -->
+    <div class="timer-bar-wrap">
+      <div id="timer-bar" class="timer-bar"></div>
+    </div>
+
+    <!-- Timer number -->
+    <div id="timer-text" class="timer-text">15</div>
+
+    <!-- Question text -->
+    <div id="question-text" class="question-box"></div>
+
+    <!-- Answer option buttons (injected by JS) -->
+    <div id="options-container" class="options-grid"></div>
+
+    <!-- Feedback banner shown after answering -->
+    <div id="feedback-banner" class="feedback-banner hidden"></div>
+
+    <!-- Next question button -->
+    <button id="next-btn" class="btn-primary hidden">Next →</button>
+  </div>
+
+  <!-- ───────────────────────────────────────────
+       SCREEN 3: Results Screen
+  ─────────────────────────────────────────────── -->
+  <div id="result-screen" class="screen">
+    <div id="result-emoji" class="result-emoji">🏆</div>
+    <h2 class="result-title">Quiz Complete!</h2>
+    <div id="final-score" class="final-score"></div>
+    <p id="result-message" class="result-msg"></p>
+    <!-- Review summary is injected here by JS -->
+    <div id="review-list" class="review-list"></div>
+    <button id="restart-btn" class="btn-primary">Play Again ⚡</button>
+  </div>
+
+  <!-- Main JS file -->
+  <script src="quiz.js"></script>
+</body>
+</html>

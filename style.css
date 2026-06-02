@@ -1,0 +1,373 @@
+/* ================================================
+   QUIZ BLITZ — style.css
+   Aesthetic: High-energy retro arcade meets
+   dark brutalist card layout.
+   ================================================ */
+
+/* ── CSS Variables ── */
+:root {
+  --bg:        #0d0d0d;
+  --card:      #161616;
+  --border:    #2a2a2a;
+  --accent:    #f5c518;   /* electric yellow */
+  --accent2:   #ff4d4d;   /* hot red for wrong */
+  --correct:   #22c55e;   /* green for correct */
+  --text:      #f0f0f0;
+  --muted:     #888;
+  --radius:    14px;
+  --transition: 0.25s ease;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* subtle grid texture for depth */
+  background-image:
+    linear-gradient(rgba(245,197,24,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,197,24,.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Screen Manager ── */
+/* All screens are hidden by default; .active makes one visible */
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 580px;
+  padding: 28px 20px 36px;
+  animation: fadeUp 0.4s ease forwards;
+}
+.screen.active { display: flex; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ────────────────────────────────
+   START SCREEN
+──────────────────────────────── */
+.brand {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.brand-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 8px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.15); }
+}
+
+/* Big display font for the logo */
+.brand-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(3.5rem, 10vw, 5.5rem);
+  letter-spacing: 4px;
+  color: var(--accent);
+  line-height: 1;
+  text-shadow: 4px 4px 0 rgba(245,197,24,.18);
+}
+
+.brand-sub {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-top: 6px;
+  letter-spacing: .5px;
+}
+
+/* Info cards row on start screen */
+.info-cards {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.info-card {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 12px;
+  text-align: center;
+  font-size: .88rem;
+  color: var(--muted);
+  transition: border-color var(--transition);
+}
+.info-card:hover { border-color: var(--accent); color: var(--text); }
+.info-card span { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+
+/* ────────────────────────────────
+   PRIMARY BUTTON (shared)
+──────────────────────────────── */
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px 48px;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 4px 24px rgba(245,197,24,.25);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(245,197,24,.4);
+}
+.btn-primary:active { transform: translateY(0); }
+
+/* ────────────────────────────────
+   QUIZ SCREEN
+──────────────────────────────── */
+
+/* Top bar: question number + score */
+.top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.counter {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+.score-tag {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 4px 16px;
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Timer bar (shrinks over 15 seconds via JS) */
+.timer-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.timer-bar {
+  height: 100%;
+  width: 100%;                    /* JS shrinks this */
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 1s linear, background 0.3s;
+}
+
+/* Changes color when time is low */
+.timer-bar.danger { background: var(--accent2); }
+
+/* Numeric countdown display */
+.timer-text {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2.2rem;
+  color: var(--accent);
+  margin-bottom: 18px;
+  transition: color 0.3s;
+  letter-spacing: 2px;
+}
+.timer-text.danger { color: var(--accent2); }
+
+/* Question card */
+.question-box {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.55;
+  margin-bottom: 22px;
+  min-height: 100px;
+}
+
+/* 2-column grid for answer options */
+.options-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+/* Individual option button */
+.option-btn {
+  background: var(--card);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+  line-height: 1.4;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: rgba(245,197,24,.06);
+}
+
+/* States applied after user answers */
+.option-btn.correct {
+  background: rgba(34,197,94,.15);
+  border-color: var(--correct);
+  color: var(--correct);
+}
+.option-btn.wrong {
+  background: rgba(255,77,77,.12);
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+.option-btn:disabled { cursor: default; transform: none; }
+
+/* Feedback banner below options */
+.feedback-banner {
+  width: 100%;
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  font-size: .95rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 16px;
+  animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.feedback-banner.correct-fb {
+  background: rgba(34,197,94,.15);
+  border: 1px solid var(--correct);
+  color: var(--correct);
+}
+.feedback-banner.wrong-fb {
+  background: rgba(255,77,77,.12);
+  border: 1px solid var(--accent2);
+  color: var(--accent2);
+}
+.feedback-banner.timeout-fb {
+  background: rgba(245,197,24,.1);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+/* Utility: hidden */
+.hidden { display: none !important; }
+
+/* ────────────────────────────────
+   RESULT SCREEN
+──────────────────────────────── */
+.result-emoji {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  animation: bounce 1s ease infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-10px); }
+}
+
+.result-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2.8rem;
+  letter-spacing: 3px;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+/* Large score display */
+.final-score {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(3rem, 10vw, 5rem);
+  color: var(--text);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.result-msg {
+  color: var(--muted);
+  font-size: .98rem;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+/* Review list — each Q/A summary */
+.review-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Style the scrollbar */
+.review-list::-webkit-scrollbar { width: 4px; }
+.review-list::-webkit-scrollbar-track { background: var(--card); }
+.review-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+/* Individual review item */
+.review-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: .88rem;
+  line-height: 1.5;
+  text-align: left;
+  border-left: 4px solid transparent;
+}
+
+.review-item.rev-correct { border-left-color: var(--correct); }
+.review-item.rev-wrong   { border-left-color: var(--accent2); }
+.review-item.rev-timeout { border-left-color: var(--accent); }
+
+.review-item .rev-q { color: var(--muted); font-size: .82rem; margin-bottom: 4px; }
+.review-item .rev-a { font-weight: 600; }
+
+/* ── Responsive tweaks ── */
+@media (max-width: 480px) {
+  .options-grid { grid-template-columns: 1fr; } /* stack on small screens */
+  .info-cards   { flex-direction: column; }
+  .info-card    { padding: 14px 12px; }
+}
